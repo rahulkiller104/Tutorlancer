@@ -1,10 +1,31 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ScrollView, StyleSheet, Text, View ,ActivityIndicator} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import DashBoardCard from '../components/Dashboard.js/DashboardCardItem'
 import TableItem from '../components/Dashboard.js/TableItem'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const Dashboard = (props) => {
+  
+  const [sessionData , setSessionData ] = useState();
+    const [loading,setLoading] = useState(false);
+  const id = useSelector(state => state.auth.data.saveTutor.tutor_id);
+
+  useEffect(()=>{
+    console.log("ID",id)
+  axios.post('https://annular-arena-331607.el.r.appspot.com/d6/api/allSessions/fetchTutorSession',
+  {
+    tutor_id:id
+  }
+  )
+  .then(data =>{
+    // console.log("SESSION-DATA--->",data.data.sessionData);
+    setSessionData(data.data.allSessions);
+  })
+  .catch(err => console.log(err))
+  },[])
+
   return (
     <View style={styles.dashboard}>
       <Header props={props} />
@@ -21,12 +42,9 @@ const Dashboard = (props) => {
           showsHorizontalScrollIndicator={false}>
          <View>
            <TableItem  head={true}/>
-           <TableItem />
-           <TableItem />
-           <TableItem />
-           <TableItem />
-           <TableItem />
-           <TableItem />
+             {/* {sessionData && }
+              */}
+               {!sessionData ? <ActivityIndicator style={{height:100,marginRight:'20%'}} size={26} />:sessionData.map(data =><TableItem data ={data} />)}
          </View>
         </ScrollView>
       

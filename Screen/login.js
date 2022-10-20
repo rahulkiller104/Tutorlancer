@@ -33,6 +33,8 @@ const Login = ({ navigation}) => {
     setData(data.data);
     // console.log(data.data);
     dispatch(authAction.login(data.data))
+    setLoading(false)
+    console.log(loading)
   }
   
     )

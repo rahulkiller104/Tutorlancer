@@ -1,11 +1,29 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 // import HistoryItem from '../components/Dashboard.js/HistoryItem'
 import HistoryItem from '../components/HistoryItem'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 
 
 const History = (props) => {
+  const [sessionData , setSessionData ] = useState();
+  const id = useSelector(state => state.auth.data.saveTutor.tutor_id);
+
+  useEffect(()=>{
+    console.log("ID",id)
+  axios.post('https://annular-arena-331607.el.r.appspot.com/d6/api/allSessions/fetchTutorSession',
+  {
+    tutor_id:id
+  }
+  )
+  .then(data =>{
+    // console.log("SESSION-DATA--->",data.data.sessionData);
+    setSessionData(data.data.sessionData);
+  })
+  .catch(err => console.log(err))
+  },[])
   return (
     <View style={styles.dashboard}>
       <Header props={props} />
@@ -17,12 +35,7 @@ const History = (props) => {
           showsHorizontalScrollIndicator={false}>
          <View>
            <HistoryItem  head={true}/>
-           <HistoryItem session ={true}/>
-           <HistoryItem session ={true}/>
-           <HistoryItem session ={true}/>
-           <HistoryItem session ={true}/>
-           <HistoryItem session ={true}/>
-           <HistoryItem session ={true}/>
+           {sessionData && sessionData.map(data => <HistoryItem session ={true} data ={data}/>)}
          </View>
         </ScrollView>
       

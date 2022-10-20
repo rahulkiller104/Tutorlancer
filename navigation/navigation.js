@@ -11,10 +11,13 @@ import Setting from '../Screen/Setting';
 import UpcommingSession from '../Screen/UpcommingSession'
 import { SimpleLineIcons,AntDesign } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import { createStackNavigator } from '@react-navigation/stack';
+
 import Login from '../Screen/login';
 import Signup from '../Screen/signup';
 import Forgotpassword from '../Screen/forgotpassword';
+import Profile from '../Screen/Profile';
 
 
   const Stack = createStackNavigator();
@@ -88,9 +91,20 @@ import Forgotpassword from '../Screen/forgotpassword';
               <MaterialIcons name="history" size={22} color="black" />
             )
           }}  />
+
+          <Drawer.Screen name='UpcommingSession' component={UpcommingSession}
+          options={{
+            title:"UpcommingSession",
+            drawerIcon:({focused,size}) => (
+              <FontAwesome5 name="chalkboard-teacher" size={20} color="black" />
+            )
+          }}
+          
+          />
           <Drawer.Screen name="Payment" component={Payment} />
-          <Drawer.Screen name='UpcommingSession' component={UpcommingSession} />
+         
           <Drawer.Screen name='Setting' component={Setting} />
+          <Drawer.Screen name='Profile' component={Profile} />
         </Drawer.Navigator>
       
     );

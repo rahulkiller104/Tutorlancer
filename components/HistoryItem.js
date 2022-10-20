@@ -4,6 +4,8 @@ import Checkbox from 'expo-checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const HistoryItem=props => {
+
+  console.log(props.data?props.data.client_amount:'')
     
     if(props.head){
      
@@ -21,18 +23,18 @@ const HistoryItem=props => {
 
   
         return (
-            <View style={styles.tableItem}>
+            <View style={styles.tableItem} key={props.data && props.data.sessionId}>
               <View style={[styles.itemText,{flexDirection:'row',justifyContent:'space-around'}]}>
               <Checkbox
                value={true}
               />
-                <Text> 1200104101</Text>
+                <Text> {props.data?props.data.sessionId:""}</Text>
                 </View>
-              <Text style={styles.itemText}>Assignment</Text>
-              <Text style={styles.itemText}>testing purpose</Text>
-              <Text style={styles.itemText}>Sep 21, 2022</Text>
-              <Text style={styles.itemText}>Rs 1000</Text>
-              <View style={[styles.itemText,styles.status]}><Text style={{color:'green'}}>COMPLETED</Text></View>
+              <Text style={styles.itemText}>{props.data?props.data.type:""}</Text>
+              <Text style={styles.itemText}>{props.data?props.data.subject:""}</Text>
+              <Text style={styles.itemText}>{props.data?props.data.deadline:""}</Text>
+              <Text style={styles.itemText}>{props.data?props.data.client_amount?props.data.client_amount:'--':'--'}</Text>
+              <View style={[styles.itemText,styles.status]}><Text style={{ color:props.data?props.data.work_status === "Completed" ? 'green':'orange':"black"}}>{props.data?props.data.work_status:""}</Text></View>
             </View>
           )
         }
