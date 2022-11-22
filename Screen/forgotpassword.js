@@ -23,7 +23,7 @@ const Forgotpassword = ({ navigation}) => {
           password: password,
         };
         const res = await axios.post(
-          `https://device6chatapi.el.r.appspot.com/api/sessions/resetPassword`,
+          `https://dev6apis.el.r.appspot.com/api/sessions/resetPassword`,
           data
         );
         console.log(res.data)

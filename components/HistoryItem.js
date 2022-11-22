@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View} from 'react-native'
 import React from 'react'
 import Checkbox from 'expo-checkbox';
+import moment from "moment";
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const HistoryItem=props => {
 
-  console.log(props.data?props.data.client_amount:'')
+  // console.log(props.data?props.data.type:'')
     
     if(props.head){
      
         return (
-            <View style={styles.tableItem}>
+            <View style={styles.tableItem} key={new Date() * 1000}>
               <Text style={styles.itemText}>Session Id</Text>
               <Text style={styles.itemText}>Type</Text>
               <Text style={styles.itemText}>Subject</Text>
@@ -23,18 +24,18 @@ const HistoryItem=props => {
 
   
         return (
-            <View style={styles.tableItem} key={props.data && props.data.sessionId}>
+            <View style={styles.tableItem} key={props.data.sessionId}>
               <View style={[styles.itemText,{flexDirection:'row',justifyContent:'space-around'}]}>
               <Checkbox
-               value={true}
+               value={props.data.work_status === "Completed"}
               />
                 <Text> {props.data?props.data.sessionId:""}</Text>
                 </View>
               <Text style={styles.itemText}>{props.data?props.data.type:""}</Text>
               <Text style={styles.itemText}>{props.data?props.data.subject:""}</Text>
-              <Text style={styles.itemText}>{props.data?props.data.deadline:""}</Text>
+              <Text style={styles.itemText}>{props.data?moment(props.data.deadline).format(" MMM Do YYYY, h:mm a"):""}</Text>
               <Text style={styles.itemText}>{props.data?props.data.client_amount?props.data.client_amount:'--':'--'}</Text>
-              <View style={[styles.itemText,styles.status]}><Text style={{ color:props.data?props.data.work_status === "Completed" ? 'green':'orange':"black"}}>{props.data?props.data.work_status:""}</Text></View>
+              <View style={[styles.itemText]}><Text style={{ color:props.data?props.data.work_status === "Completed" || props.data.work_status === "solution sent" ? 'green':'orange':"black"}}>{props.data?props.data.work_status:""}</Text></View>
             </View>
           )
         }
@@ -54,7 +55,8 @@ const styles = StyleSheet.create({
     itemText:{
         margin:10,
         paddingHorizontal:10,
-        paddingVertical:3
+        paddingVertical:3,
+        width:150,
     },
     status:{
         borderRadius:20,

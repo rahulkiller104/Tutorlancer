@@ -11,7 +11,7 @@ import Setting from '../Screen/Setting';
 import UpcommingSession from '../Screen/UpcommingSession'
 import { SimpleLineIcons,AntDesign } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { FontAwesome5 ,Feather} from '@expo/vector-icons'; 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from '../Screen/login';
@@ -40,7 +40,7 @@ import Profile from '../Screen/Profile';
           source={require('../assets/download.png')}
            resizeMode='contain'
         />
-        <Text style={{color:'#0056B3',fontSize:20}}>tutorlancer</Text>
+        <Text style={{color:'#0056B3',fontSize:20}}> UrDoer</Text>
         </View>
         
       ),
@@ -80,7 +80,7 @@ import Profile from '../Screen/Profile';
           }} />
           
           <Drawer.Screen name="SessionRequest" component={SessionRequest}  options={{
-            title:"SessionRequest",
+            title:"TaskRequest",
             drawerIcon:({focused,size}) => (
              <AntDesign name="menuunfold" size={20} color="black" /> 
             )
@@ -94,17 +94,40 @@ import Profile from '../Screen/Profile';
 
           <Drawer.Screen name='UpcommingSession' component={UpcommingSession}
           options={{
-            title:"UpcommingSession",
+            title:"UpcommingTask",
             drawerIcon:({focused,size}) => (
               <FontAwesome5 name="chalkboard-teacher" size={20} color="black" />
             )
           }}
           
           />
-          <Drawer.Screen name="Payment" component={Payment} />
+          <Drawer.Screen name="Payment"  component={Payment} 
+            options={{
+              title:"Payment",
+              drawerIcon:({focused,size}) => (
+                <MaterialIcons name="payment" size={25} color="black" />
+              )
+            }}
+
+          />
          
-          <Drawer.Screen name='Setting' component={Setting} />
-          <Drawer.Screen name='Profile' component={Profile} />
+          <Drawer.Screen name='Setting' component={Setting}  
+             options={{
+              title:"Setting",
+              drawerIcon:({focused,size}) => (
+                <Feather name="settings" size={25} color="black" />
+              )
+            }}
+
+          />
+          <Drawer.Screen name='Profile' component={Profile} 
+           options={{
+            title:"Profile",
+            drawerIcon:({focused,size}) => (
+              <FontAwesome5 name="user" size={25} color="black" />
+            )
+          }}
+          />
         </Drawer.Navigator>
       
     );
@@ -112,10 +135,10 @@ import Profile from '../Screen/Profile';
 
   const MainNavigation = () =>{
 
-   const data = useSelector(state => state.auth.data);
-   if(data)
-   console.log('MAIN-->',data.accessToken)
-    return  data && data.accessToken?<DrawerNavigation /> :<StackNavigation/>;
+   const data = useSelector(state => state.auth.accessToken);
+  
+    console.log('MAIN-->',data)
+    return  data ?<DrawerNavigation /> :<StackNavigation/>;
   }
 
   export default MainNavigation;

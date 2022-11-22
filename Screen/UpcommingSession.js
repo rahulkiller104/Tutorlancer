@@ -10,9 +10,11 @@ const UpcommingSession = (props) => {
 
   const [sessionData , setSessionData ] = useState();
   const id = useSelector(state => state.auth.data.saveTutor.tutor_id);
+  const email = useSelector(state => state.auth.data.saveTutor.email);
+  // console.log(id);
 
   useEffect(()=>{
-    console.log("ID",id)
+    // console.log("ID",id)
   axios.post('https://annular-arena-331607.el.r.appspot.com/d6/api/allSessions/fetchTutorSession',
   {
     tutor_id:id
@@ -33,7 +35,7 @@ const UpcommingSession = (props) => {
         <ScrollView>
 
          <View>
-           {sessionData &&  sessionData.map(data => <UpcommingSessionItem  data = {data}/>)}
+           {sessionData &&  sessionData.map(data => <UpcommingSessionItem  data = {data} email={email}/>)}
          </View>
         </ScrollView>
       

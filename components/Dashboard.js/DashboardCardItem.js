@@ -13,7 +13,7 @@ const DashBoardCard = props => {
       const TypeOfIcon=MaterialCommunityIcons;
 
     return (
-        <View>
+        <View key={firstText}>
  <View style={[styles.card, styles.shadowProp]}>
     <View style={styles.top}>
      <View style={styles.top}>

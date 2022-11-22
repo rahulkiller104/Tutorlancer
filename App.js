@@ -5,6 +5,7 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import auth from './Redux/Reducer/auth'
+import Toast from 'react-native-toast-message';
 
 
 const rootReducer = combineReducers({
@@ -26,6 +27,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
     return (
        <Provider store={store} >
           <Main />
+          <Toast  visibilityTime ={4000}/>
        </Provider>
        
       

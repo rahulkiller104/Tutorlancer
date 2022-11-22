@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet, Text, View ,ActivityIndicator} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import TableItem from '../components/Dashboard.js/TableItem'
@@ -9,34 +9,52 @@ const SessionRequest = (props) => {
 
   const [sessionData , setSessionData ] = useState();
   const id = useSelector(state => state.auth.data.saveTutor.tutor_id);
+  const [refreshing, setRefreshing] = useState(false);
+  const[loading ,setLoading] = useState(false);
+
+
+  const onRefresh = React.useCallback(() => {
+    setLoading(true);
+    axios.post('https://annular-arena-331607.el.r.appspot.com/d6/api/allSessions/fetchNotifiedSession',
+    {
+      tutor_id:id
+    }
+    )
+    .then(data =>{
+      console.log("SESSION-DATA--->",data.data.notifiedData);
+      setSessionData(data.data.notifiedData);
+    })
+    .catch(err => console.log(err))
+    .finally(e =>{setRefreshing(false) , setLoading(false)});
+  }, []);
+
+
 
   useEffect(()=>{
     console.log("ID",id)
-  axios.post('https://annular-arena-331607.el.r.appspot.com/d6/api/allSessions/fetchTutorSession',
-  {
-    tutor_id:id
-  }
-  )
-  .then(data =>{
-    console.log("SESSION-DATA--->",data.data.allSessions);
-    setSessionData(data.data.allSessions);
-  })
-  .catch(err => console.log(err))
+    onRefresh();
   },[])
   return (
     <View style={styles.dashboard}>
       <Header props={props} />
-     <ScrollView showsVerticalScrollIndicator={false}>
+     <ScrollView 
+          refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+     showsVerticalScrollIndicator={false}>
       <View style={styles.table}>
       <Text style={styles.headSession}>Latest Session</Text>
-        <ScrollView
+       {!loading ? <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
          <View>
            <TableItem  head={true}/>
            {sessionData && sessionData.map(data =>  <TableItem session ={true} data={data}/>)}
          </View>
-        </ScrollView>
+        </ScrollView> : <ActivityIndicator style={{marginVertical:'100%'}} size="large" color='black'/>}
       
       </View>
       </ScrollView>

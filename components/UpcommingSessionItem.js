@@ -1,17 +1,68 @@
 import { Dimensions, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import moment from "moment";
+import { useEffect } from 'react';
+import axios from 'axios';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const UpcommingSessionItem = props => {
+
+  const[uploadTask ,setUploadTask] =React.useState();
    
     const onTaskFile = () =>{
         const URL = 'https://drive.google.com/drive/folders/13KOClyWDb6TmrYri14fU2sfXU4tp-1J3';
         Linking.openURL(URL)
     }
 
-    console.log("SESSION-DATA--->",props.data);
+    const onUploadSolution = () => Linking.openURL(uploadTask);
+    
+
+    const childFolder=async()=>{
+      let deviceNo;
+      console.log("HEATED")
+      if(props.data.sessionId.length===11){
+        deviceNo=props.data.sessionId?.slice(0,2)
+      }else if(props.data.sessionId?.length===10){
+        deviceNo=props.data.sessionId?.slice(0,1)
+      }
+    
+      try{
+        console.log('DATA-->',{
+          emailId:props.email, //from getTutorDetails api
+          tutorId:props.data.tutor_id, //from fetchTutorSession api
+          clientId:props.data.client_id, //from fetchTutorSession api
+          sessionId:props.data.sessionId, //from fetchTutorSession api
+          assignmentStatus:"assigned",
+          deviceNo:deviceNo
+        })
+
+      const createChildSolnFolder=await axios.post(`https://annular-arena-331607.el.r.appspot.com/d${deviceNo}/api/sessions/childSolutionFolderCreate`,{
+        emailId:props.email, //from getTutorDetails api
+        tutorId:props.data.tutor_id, //from fetchTutorSession api
+        clientId:props.data.client_id, //from fetchTutorSession api
+        sessionId:props.data.sessionId, //from fetchTutorSession api
+        assignmentStatus:"assigned",
+        
+      })
+     
+      setUploadTask(createChildSolnFolder?.data?.solnFolder);
+      console.log("FOLDER-->",(createChildSolnFolder?.data?.solnFolder)
+      );
+    }catch(err){
+      console.log(err);
+    }
+     
+  
+    }
+  
+
+    useEffect(()=>{
+      childFolder();
+    },[])
+
+    // console.log("SESSION-DATA--->",props.data);
   return (
     <View style={styles.itemBox} key={props.data.sessionId}>
 
@@ -30,7 +81,7 @@ const UpcommingSessionItem = props => {
         <View>
            <Text style={{color:"blue",fontSize:22,textAlign:'center'}}>{props.data.type}</Text>
            <Text style={{fontWeight:'500',fontSize:18,marginVertical:'5%',textAlign:'center',marginVertical:'10%'}}>Testing purpose</Text>
-           <Text style={{textAlign:'center'}}>Deadline:{props.data.deadline}</Text>
+           <Text style={{textAlign:'center'}}>Deadline:{moment(props.data.deadline).format(" MMM Do YYYY, h:mm a")}</Text>
         </View>
         
       </View>
@@ -39,12 +90,21 @@ const UpcommingSessionItem = props => {
 
       <View style={{flexDirection:'row' ,justifyContent:'space-between'}}>
         <View style={{flexDirection:'row'}}>
-            <Text style={{color:'rgb(80, 72, 229)'}}>Amount : </Text>
+            <Text style={{color:'rgb(80, 72, 229)'}}>Amount : 200 </Text>
             <Text>{props.data.currency}</Text>
         </View>
-        <TouchableOpacity onPress={onTaskFile} style={styles.bottomBox}>
-            <Text style={{color:'rgb(80, 72, 229)'}}>Task File</Text>
+       <View style={{flexDirection:'row'}}>
+        
+       <TouchableOpacity onPress={onTaskFile} style={styles.bottomBox}>
+            <Text style={{color:'rgb(80, 72, 229)',fontSize:windowWidth * 0.023 }}>GET FILES</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={onTaskFile} style={styles.bottomBox}>
+            <Text style={{color:'rgb(80, 72, 229)' ,fontSize:windowWidth * 0.022}}>UPLOAD SOLUTION</Text>
+        </TouchableOpacity>
+
+        </View> 
+
       </View>
 
 
@@ -92,7 +152,8 @@ const styles = StyleSheet.create({
          paddingVertical:5,
          borderColor:'rgb(80, 72, 229)' ,
          borderWidth:1,
-         borderRadius:5
+         borderRadius:5,
+         marginHorizontal:10
 
         }
     

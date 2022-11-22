@@ -5,6 +5,8 @@ import { Dimensions , KeyboardAvoidingView} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 
+import Toast from 'react-native-toast-message';
+
 import * as authAction from '../Redux/action/auth'
 
 const windowWidth = Dimensions.get('window').width;
@@ -25,20 +27,34 @@ const Login = ({ navigation}) => {
   const onLogin = () =>{
   console.log('LOGIN-->',email.toLowerCase(),password)
   setLoading(true);
-  axios.post('https://device6chatapi.el.r.appspot.com/api/auth/tutorLogin',{
-    email:email.toLowerCase(),
-    password:password
+  axios.post('https://dev6apis.el.r.appspot.com/api/auth/tutorLogin',{
+    email:email? email: 'shiv7255918@gmail.com',
+    password:password? password : "Aquarium@12"
   })
   .then(data => {
     setData(data.data);
-    // console.log(data.data);
+    console.log(data.data);
     dispatch(authAction.login(data.data))
+    dispatch(authAction.setTokens(data.data))
     setLoading(false)
     console.log(loading)
+
+    Toast.show({
+      type: 'success',
+      text1: 'Login Successful',
+      text2: "Welcome to UrDoer"
+    });
+
   }
   
     )
-  .catch(err => console.log(err))
+  .catch(err => {
+    Toast.show({
+      type: 'error',
+      text1: 'Authentication Failed',
+      text2: "Username or password incorrect!"
+    });
+    console.log(err)})
   .finally(e=>setLoading(false));
 
 
