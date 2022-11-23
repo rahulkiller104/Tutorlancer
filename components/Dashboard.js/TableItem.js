@@ -50,10 +50,11 @@ const TableItem =props => {
 
               
               {props.data.showedInterest && props.data.acceptRequest  ?
-              <TouchableOpacity onPress={()=>Linking.openURL(props.data && `https://tutor-response.tutorpoint.in/d${deviceNo}/tutorForm/${sessionId}/${props.data.tutor_id}`) } style={[styles.itemText,styles.status]}><Text style={{color:'black'}}>Accept Session</Text></TouchableOpacity>
+              <TouchableOpacity onPress={()=>Linking.openURL(props.data && `https://tutor-response.tutorpoint.in/d${deviceNo}/tutorForm/${props?.data?.sessionId}/${props.data.tutor_id}`) } style={[styles.itemText,styles.status]}><Text style={{color:'black'}}>Accept Session</Text></TouchableOpacity>
               :
-              props.data.showedInterest ?
-               <TouchableOpacity onPress={()=>Linking.openURL(props.data && `https://tutor-response.tutorpoint.in/d${deviceNo}/tutorForm/${sessionId}/${props.data.tutor_id}?accept_task=success`) } style={[styles.itemText,styles.status]}><Text style={{color:'black'}}>show Interest</Text></TouchableOpacity> : <Text>---- ----</Text>
+              !props.data.showedInterest ?
+               <TouchableOpacity  style={[styles.itemText,styles.status]}><Text style={{color:'#D3D3D3'}}>Shown Interest</Text></TouchableOpacity> : 
+               <TouchableOpacity onPress={()=>Linking.openURL(props.data && `https://tutor-response.tutorpoint.in/d${deviceNo}/tutorForm/${props?.data?.sessionId}/${props.data.tutor_id}?accept_task=success`) } style={[styles.itemText,styles.status]}><Text style={{color:'black'}}>Show Interest</Text></TouchableOpacity>
               }
             </View>
           )

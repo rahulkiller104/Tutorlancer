@@ -34,7 +34,7 @@ const HistoryItem=props => {
               <Text style={styles.itemText}>{props.data?props.data.type:""}</Text>
               <Text style={styles.itemText}>{props.data?props.data.subject:""}</Text>
               <Text style={styles.itemText}>{props.data?moment(props.data.deadline).format(" MMM Do YYYY, h:mm a"):""}</Text>
-              <Text style={styles.itemText}>{props.data?props.data.client_amount?props.data.client_amount:'--':'--'}</Text>
+              <Text style={styles.itemText}>{props.data?props.data.tutor_dealt_amount? "₹" + (+props.data.tutor_dealt_amount/100):'--':'--'}</Text>
               <View style={[styles.itemText]}><Text style={{ color:props.data?props.data.work_status === "Completed" || props.data.work_status === "solution sent" ? 'green':'orange':"black"}}>{props.data?props.data.work_status:""}</Text></View>
             </View>
           )
